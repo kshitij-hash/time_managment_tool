@@ -18,7 +18,7 @@ export default function Home() {
     // Here you would typically send the new task to your backend API
   }
   return (
-    <main className="container flex justify-center items-center flex-col min-h-screen mx-auto p-4 max-w-4xl">
+    <main className="container flex justify-center items-center flex-col min-h-[90vh] mx-auto p-4 max-w-4xl">
       <h1 className="text-3xl font-bold mb-8">Time Management App</h1>
       <CreateTaskForm onTaskCreated={handleTaskCreated} />
     </main>
