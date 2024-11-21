@@ -1,9 +1,8 @@
-import { auth, signIn } from "@/auth"
-import { Button } from "@/components/ui/button";
+import { auth } from "@/auth"
 import Link from "next/link"
 import UserButton from "./UserButton";
 
-export default async function NavBar() {
+export async function NavBar() {
   const session = await auth();
   const user = session?.user;
   return (
@@ -12,19 +11,8 @@ export default async function NavBar() {
         <Link href="/" className="font-bold">
           Time Management App
         </Link>
-        {user ? <UserButton user={user} /> : <SignInButton />}
+        {user && <UserButton user={user} />}
       </nav>
     </header>
   )
-}
-
-function SignInButton() {
-    return <form action={async () => {
-        "use server";
-        await signIn();
-    }}>
-        <Button type="submit">
-            Sign In
-        </Button>
-    </form>
 }
