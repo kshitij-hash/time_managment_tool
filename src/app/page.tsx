@@ -1,7 +1,7 @@
-'use client'
+"use client"
 
-import { useState } from 'react'
-import { CreateTaskForm } from './components/CreateTask'
+import { useState } from "react"
+import { CreateTaskForm } from "./components/CreateTask"
 interface Task {
   id: number
   name: string

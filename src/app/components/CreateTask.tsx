@@ -1,6 +1,6 @@
-'use client'
+"use client"
 
-import { useState } from 'react'
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -20,7 +20,7 @@ interface CreateTaskFormProps {
 }
 
 export function CreateTaskForm({ onTaskCreated }: CreateTaskFormProps) {
-  const [newTask, setNewTask] = useState('')
+  const [newTask, setNewTask] = useState("")
   const [isUrgent, setIsUrgent] = useState(false)
   const [isImportant, setIsImportant] = useState(false)
   const [isUnder5Min, setIsUnder5Min] = useState(false)
@@ -34,11 +34,11 @@ export function CreateTaskForm({ onTaskCreated }: CreateTaskFormProps) {
       name: newTask,
       urgent: isUrgent,
       important: isImportant,
-      timeUnder5Min: isUnder5Min
+      timeUnder5Min: isUnder5Min,
     }
 
     onTaskCreated(task)
-    setNewTask('')
+    setNewTask("")
     setIsUrgent(false)
     setIsImportant(false)
     setIsUnder5Min(false)
