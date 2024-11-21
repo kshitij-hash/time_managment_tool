@@ -18,7 +18,7 @@ interface UserButtonProps {
   user: User
 }
 
-export default function UserButton({ user }: UserButtonProps) {
+export function UserButton({ user }: UserButtonProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
