@@ -12,6 +12,17 @@ Fork the [repository](https://github.com/AthenaFoss/time_managment_tool) & clone
 git clone https://github.com/{your_github_username}/time_managment_tool.git
 ```
 
+#### Instant Docker Setup
+
+> Note -
+> Your docker-deamon should be online
+
+```bash
+docker-compose up
+```
+
+### Traditional Setup
+
 #### 2. Install Dependencies
 
 Open the `time_management_tool` directory in your preferred code editor or IDE.
@@ -43,7 +54,12 @@ You can use a cloud service like Neon or Supabase, or run a local instance with 
 - Local PostgreSQL with Docker:
 
 ```bash
-docker-compose up -d
+docker run -d \
+--name cms-db \
+-e POSTGRES_PASSWORD=password_db \
+-e  POSTGRES_DB=time_management  \
+-p 5432:5432 \
+postgres
 ```
 
 Update the `.env` file with your PostgreSQL connection details -
@@ -62,7 +78,7 @@ DATABASE_URL=postgresql://postgres:password_db@localhost:5432/time_management
 npm run db:generate
 ```
 
-#### 5. Start the Application
+#### 6. Start the Application
 
 Run the application in development mode -
 
@@ -74,4 +90,12 @@ Visit the application at -
 
 ```bash
 http://localhost:3000
+```
+
+### Other instructions
+
+#### 1. To add a new shadcn component, use the below command -
+
+```bash
+  npm run ui:add
 ```

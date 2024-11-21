@@ -8,10 +8,11 @@
     "start": "next start",
     "lint": "next lint",
     "db:generate": "prisma generate",
-    "db:migrate:dev": "prisma migrate dev",
+    "db:migrate": "prisma migrate dev",
     "studio": "prisma studio",
     "ui:add": "npx shadcn@latest add",
-    "prettier": "npx prettier --write '**/*.{js,jsx,ts,tsx}'"
+    "prettier": "npx prettier --write '**/*.{js,jsx,ts,tsx}'",
+    "dev:docker": "npm run db:migrate  && next dev"
   },
   "dependencies": {
     "@prisma/client": "^5.21.1",
