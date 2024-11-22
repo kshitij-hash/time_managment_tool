@@ -7,7 +7,7 @@ export default function Home() {
       {/* //* LANDING PAGE (PUBLIC ROUTE) */}
       <h1 className="text-3xl font-bold mb-8">Time Management App</h1>
       <Button className="font-normal" asChild>
-        <Link href="/login">Get started</Link>
+        <Link href="/register">Get started</Link>
       </Button>
     </main>
   )

@@ -3,7 +3,7 @@
 import bcrypt from "bcryptjs"
 import { RegisterSchema } from "@/schemas/index"
 import * as z from "zod"
-import { prisma } from "@/lib/prisma"
+import prisma from "@/lib/prisma"
 
 export const register = async (data: z.infer<typeof RegisterSchema>) => {
   const validatedFields = RegisterSchema.safeParse(data)
