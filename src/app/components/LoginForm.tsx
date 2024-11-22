@@ -24,6 +24,7 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { login } from "../(auth)/login/actions/login"
 
 export function LoginForm() {
   const form = useForm<z.infer<typeof LoginSchema>>({
@@ -34,8 +35,16 @@ export function LoginForm() {
     },
   })
 
-  const onSubmit = (values: z.infer<typeof LoginSchema>) => {
-    console.log(values)
+  const onSubmit = (data: z.infer<typeof LoginSchema>) => {
+    login(data)
+      .then((response: { success: string } | { error: string }) => {
+        form.reset();
+        if ('success' in response) {
+          alert(response.success);
+        } else {
+          alert(response.error);
+        }
+      })
     form.reset()
   }
 

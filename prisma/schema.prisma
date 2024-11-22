@@ -4,7 +4,8 @@ datasource db {
 }
  
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
 }
  
 model User {
@@ -13,8 +14,8 @@ model User {
   email         String          @unique
   emailVerified DateTime?
   image         String?
+  password      String?
   accounts      Account[]
-  sessions      Session[]
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -42,25 +43,4 @@ model Account {
  
   @@id([provider, providerAccountId])
   @@map("accounts")
-}
- 
-model Session {
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("sessions")
-}
- 
-model VerificationToken {
-  identifier String
-  token      String
-  expires    DateTime
- 
-  @@id([identifier, token])
-  @@map("verification_token")
 }

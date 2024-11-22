@@ -24,20 +24,33 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { register } from "../(auth)/register/actions/register"
+import { useState } from "react"
+import { Loader2 } from "lucide-react"
 
 export function RegisterForm() {
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
-      username: "",
+      name: "",
       email: "",
       password: "",
     },
   })
 
-  const onSubmit = (values: z.infer<typeof RegisterSchema>) => {
-    console.log(values)
-    form.reset()
+  const onSubmit = (data: z.infer<typeof RegisterSchema>) => {
+    setIsSubmitting(true)
+    register(data)
+      .then((response: { success: string } | { error: string }) => {
+        setIsSubmitting(false);
+        form.reset();
+        if ('success' in response) {
+          alert(response.success);
+        } else {
+          alert(response.error);
+        }
+      })
   }
 
   return (
@@ -52,17 +65,18 @@ export function RegisterForm() {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <div className="space-y-4">
-            <FormField
+              <FormField
                 control={form.control}
-                name="username"
+                name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Username</FormLabel>
+                    <FormLabel>Name</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
                         type="text"
-                        placeholder="username"
+                        placeholder="name"
+                        disabled={isSubmitting}
                       />
                     </FormControl>
                     <FormMessage />
@@ -80,6 +94,7 @@ export function RegisterForm() {
                         {...field}
                         type="email"
                         placeholder="email@example.com"
+                        disabled={isSubmitting}
                       />
                     </FormControl>
                     <FormMessage />
@@ -97,6 +112,7 @@ export function RegisterForm() {
                         {...field}
                         type="password"
                         placeholder="********"
+                        disabled={isSubmitting}
                       />
                     </FormControl>
                     <FormMessage />
@@ -105,7 +121,14 @@ export function RegisterForm() {
               />
             </div>
             <Button type="submit" className="w-full">
-              Sign up
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Signing up...
+                </>
+              ) : (
+                "Sign up"
+              )}
             </Button>
           </form>
         </Form>
