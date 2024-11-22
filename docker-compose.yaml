@@ -1,23 +1,4 @@
 services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile.dev
-    container_name: tmt-dev
-    environment:
-      - NODE_ENV=development
-      - DATABASE_URL=postgresql://postgres:password_db@postgres:5432/time_management?schema=public
-    ports:
-      - "3000:3000"
-    volumes:
-      - .:/usr/src/app
-      - node_modules:/usr/src/app/node_modules
-    depends_on:
-      postgres:
-        condition: service_healthy
-    networks:
-      - app
-
   postgres:
     image: postgres
     container_name: db
@@ -43,4 +24,3 @@ networks:
 
 volumes:
   postgres-data:
-  node_modules:

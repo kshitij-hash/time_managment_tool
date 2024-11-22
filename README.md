@@ -17,7 +17,13 @@ git clone https://github.com/{your_github_username}/time_managment_tool.git
 > Note -
 > Your docker-deamon should be online
 
+##### Run the script for instant setup
+
 ```bash
+# Give the permission to execute the setup file
+chmod +x setup.sh
+
+# Run the setup script file
 docker-compose up
 ```
 
