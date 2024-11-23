@@ -25,6 +25,8 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { login } from "../../actions/login"
+import { DEFAULT_LOGIN_REDIRECT } from "@/routes"
+import { signIn } from "next-auth/react"
 
 export function LoginForm() {
   const form = useForm<z.infer<typeof LoginSchema>>({
@@ -36,16 +38,21 @@ export function LoginForm() {
   })
 
   const onSubmit = (data: z.infer<typeof LoginSchema>) => {
-    login(data)
-      .then((response: { success: string } | { error: string }) => {
-        form.reset();
-        if ('success' in response) {
-          alert(response.success);
-        } else {
-          alert(response.error);
-        }
-      })
+    login(data).then((response: { success: string } | { error: string }) => {
+      form.reset()
+      if ("success" in response) {
+        alert(response.success)
+      } else {
+        alert(response.error)
+      }
+    })
     form.reset()
+  }
+
+  const onClickHandler = () => {
+    signIn("google", {
+      callbackUrl: DEFAULT_LOGIN_REDIRECT,
+    })
   }
 
   return (
@@ -108,7 +115,12 @@ export function LoginForm() {
             <span className="bg-background px-2 text-muted-foreground">Or</span>
           </div>
         </div>
-        <Button size="lg" className="w-full" variant="outline">
+        <Button
+          size="lg"
+          className="w-full"
+          variant="outline"
+          onClick={onClickHandler}
+        >
           <FcGoogle /> Sign in with Google
         </Button>
       </CardContent>

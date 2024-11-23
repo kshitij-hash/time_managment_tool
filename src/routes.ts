@@ -5,6 +5,7 @@ export const PUBLIC_ROUTES = [
 export const AUTH_ROUTES = [
     '/login',
     '/register',
+    '/error',
 ]
 
 export const AUTH_PREFIX = "/api/auth";
