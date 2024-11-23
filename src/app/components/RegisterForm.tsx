@@ -24,7 +24,7 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { register } from "../(auth)/register/actions/register"
+import { register } from "../../actions/register"
 import { useState } from "react"
 import { Loader2 } from "lucide-react"
 

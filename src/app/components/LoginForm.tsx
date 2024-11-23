@@ -24,7 +24,7 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { login } from "../(auth)/login/actions/login"
+import { login } from "../../actions/login"
 
 export function LoginForm() {
   const form = useForm<z.infer<typeof LoginSchema>>({
