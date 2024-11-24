@@ -46,19 +46,19 @@ export function LoginForm() {
     setIsSubmitting(true)
     login(data)
       .then((response) => {
-        if (response.success) {
-          toast({
-            title: "Login successful!",
-            description: response.success,
-          })
-        }
-        if (response.error) {
+        console.log(response)
+        //* NOTE: TEMP solution: the credentials sign in is not returning **success** in response
+        if (response?.error) {
           toast({
             title: "Login failed!",
             description: response.error,
             variant: "destructive",
           })
-        }
+        } else
+        toast({
+          title: "Login successful!",
+          description: "You have successfully logged in.",
+        })
       })
       .catch(() => {
         toast({
@@ -129,16 +129,14 @@ export function LoginForm() {
               />
             </div>
             <Button type="submit" className="w-full" disabled={isSubmitting}>
-              {
-                isSubmitting ? (
-                  <>
+              {isSubmitting ? (
+                <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Logging in...
                 </>
-                ) : (
-                  "Login"
-                )
-              }
+              ) : (
+                "Login"
+              )}
             </Button>
           </form>
         </Form>

@@ -24,7 +24,7 @@ export const login = async (data: z.infer<typeof LoginSchema>) => {
     },
   })
 
-  if(!existingUser || !existingUser.password) {
+  if (!existingUser || !existingUser.password) {
     return { error: "User does not exist!" }
   }
 
@@ -40,7 +40,11 @@ export const login = async (data: z.infer<typeof LoginSchema>) => {
       },
     })
 
-    const emailResponse = await sendVerificationEmail(email, token, existingUser.name)
+    const emailResponse = await sendVerificationEmail(
+      email,
+      token,
+      existingUser.name
+    )
     if (!emailResponse.success) {
       return { error: "Failed to send verification email!" }
     }
@@ -49,12 +53,12 @@ export const login = async (data: z.infer<typeof LoginSchema>) => {
   }
 
   try {
-    const response = await signIn("credentials", {
+    await signIn("credentials", {
       email,
       password,
       redirectTo: DEFAULT_LOGIN_REDIRECT,
     })
-    console.log(response)
+    //* NOTE: this response is not going to `LoginForm.tsx` returning undefined instead
     return { success: "Logged in!" }
   } catch (error) {
     if (error instanceof AuthError) {
