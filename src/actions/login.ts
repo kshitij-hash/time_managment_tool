@@ -45,7 +45,7 @@ export const login = async (data: z.infer<typeof LoginSchema>) => {
       return { error: "Failed to send verification email!" }
     }
 
-    return { success: "Verification email sent! Please verify your email." }
+    return { success: `Verification email sent to ${email}. Please verify!` }
   }
 
   try {
@@ -57,7 +57,6 @@ export const login = async (data: z.infer<typeof LoginSchema>) => {
     console.log(response)
     return { success: "Logged in!" }
   } catch (error) {
-    console.log(error)
     if (error instanceof AuthError) {
       switch (error.type) {
         case "CredentialsSignin":

@@ -29,8 +29,10 @@ import { useState } from "react"
 import { Loader2 } from "lucide-react"
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes"
 import { signIn } from "next-auth/react"
+import { useToast } from "@/hooks/use-toast"
 
 export function RegisterForm() {
+  const { toast } = useToast()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
@@ -44,14 +46,31 @@ export function RegisterForm() {
   const onSubmit = (data: z.infer<typeof RegisterSchema>) => {
     setIsSubmitting(true)
     register(data)
-      .then((response: { success: string } | { error: string }) => {
-        setIsSubmitting(false);
-        form.reset();
-        if ('success' in response) {
-          alert(response.success);
-        } else {
-          alert(response.error);
+      .then((response) => {
+        if (response.success) {
+          toast({
+            title: "Registration successful!",
+            description: response.success,
+          })
         }
+        if (response.error) {
+          toast({
+            title: "Registration failed!",
+            description: response.error,
+            variant: "destructive",
+          })
+        }
+      })
+      .catch(() => {
+        toast({
+          title: "Registration failed!",
+          description: "An error occurred. Please try again.",
+          variant: "destructive",
+        })
+      })
+      .finally(() => {
+        setIsSubmitting(false)
+        form.reset()
       })
   }
 
@@ -128,7 +147,7 @@ export function RegisterForm() {
                 )}
               />
             </div>
-            <Button type="submit" className="w-full">
+            <Button type="submit" className="w-full" disabled={isSubmitting}>
               {isSubmitting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -148,7 +167,13 @@ export function RegisterForm() {
             <span className="bg-background px-2 text-muted-foreground">Or</span>
           </div>
         </div>
-        <Button size="lg" className="w-full" variant="outline" onClick={onClickHandler}>
+        <Button
+          size="lg"
+          className="w-full"
+          variant="outline"
+          onClick={onClickHandler}
+          disabled={isSubmitting}
+        >
           <FcGoogle /> Sign up with Google
         </Button>
       </CardContent>

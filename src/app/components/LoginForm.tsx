@@ -27,8 +27,13 @@ import { Input } from "@/components/ui/input"
 import { login } from "../../actions/login"
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes"
 import { signIn } from "next-auth/react"
+import { useState } from "react"
+import { useToast } from "@/hooks/use-toast"
+import { Loader2 } from "lucide-react"
 
 export function LoginForm() {
+  const { toast } = useToast()
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -38,15 +43,34 @@ export function LoginForm() {
   })
 
   const onSubmit = (data: z.infer<typeof LoginSchema>) => {
-    login(data).then((response: { success: string } | { error: string }) => {
-      form.reset()
-      if ("success" in response) {
-        alert(response.success)
-      } else {
-        alert(response.error)
-      }
-    })
-    form.reset()
+    setIsSubmitting(true)
+    login(data)
+      .then((response) => {
+        if (response.success) {
+          toast({
+            title: "Login successful!",
+            description: response.success,
+          })
+        }
+        if (response.error) {
+          toast({
+            title: "Login failed!",
+            description: response.error,
+            variant: "destructive",
+          })
+        }
+      })
+      .catch(() => {
+        toast({
+          title: "Login failed!",
+          description: "An error occurred while trying to login.",
+          variant: "destructive",
+        })
+      })
+      .finally(() => {
+        setIsSubmitting(false)
+        form.reset()
+      })
   }
 
   const onClickHandler = () => {
@@ -78,6 +102,7 @@ export function LoginForm() {
                         {...field}
                         type="email"
                         placeholder="email@example.com"
+                        disabled={isSubmitting}
                       />
                     </FormControl>
                     <FormMessage />
@@ -95,6 +120,7 @@ export function LoginForm() {
                         {...field}
                         type="password"
                         placeholder="********"
+                        disabled={isSubmitting}
                       />
                     </FormControl>
                     <FormMessage />
@@ -102,8 +128,17 @@ export function LoginForm() {
                 )}
               />
             </div>
-            <Button type="submit" className="w-full">
-              Login
+            <Button type="submit" className="w-full" disabled={isSubmitting}>
+              {
+                isSubmitting ? (
+                  <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Logging in...
+                </>
+                ) : (
+                  "Login"
+                )
+              }
             </Button>
           </form>
         </Form>
@@ -120,6 +155,7 @@ export function LoginForm() {
           className="w-full"
           variant="outline"
           onClick={onClickHandler}
+          disabled={isSubmitting}
         >
           <FcGoogle /> Sign in with Google
         </Button>

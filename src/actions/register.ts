@@ -44,5 +44,8 @@ export const register = async (data: z.infer<typeof RegisterSchema>) => {
     return { error: "Failed to send verification email!" }
   }
 
-  return { success: "User registered successfully! Please verify your email." }
+  return {
+    success:
+      `User registered successfully! Verification email sent to ${email}`,
+  }
 }
