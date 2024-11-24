@@ -7,6 +7,7 @@ import {
   Text,
   Button,
   Container,
+  Section,
 } from "@react-email/components"
 
 interface VerificationEmailProps {
@@ -33,20 +34,37 @@ export default function VerificationEmail({
         />
       </Head>
       <Preview>Email Verification</Preview>
-      <Heading as="h2">Verify your email address</Heading>
-      <Container className="bg-gray-400">
-        <Text>Hello {name},</Text>
-        <Text>
-          Thank you for registering on <b>Time Management App</b>. To make sure
-          this is your email address, we need to verify it.
+      <Container>
+        <Heading as="h2">Verify your email address</Heading>
+        <Section>
+          <Text>Hello {name},</Text>
+          <Text>
+            Thank you for registering on <b>Time Management App</b>. To make
+            sure this is your email address, we need to verify it.
+          </Text>
+          <Button
+            style={button}
+            href={link}
+          >
+            Verify here
+          </Button>
+        </Section>
+        <Text style={{
+          fontSize: "10px",
+          color: "gray",
+        }}>
+          This link will expire after 1 hour.
         </Text>
-        <Button href={link} style={{ color: "#61dafb" }}>
-          Verify here
-        </Button>
       </Container>
-      <Text className="text-sm text-gray-300">
-        If you did not request this code, please ignore this email.
-      </Text>
     </Html>
   )
 }
+
+const button = {
+  backgroundColor: "#3949AB",
+  borderRadius: 5,
+  color: "#FFF",
+  fontWeight: "bold",
+  cursor: "pointer",
+  padding: "12px 30px",
+};
