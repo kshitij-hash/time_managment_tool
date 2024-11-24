@@ -5,9 +5,9 @@ import { LoginSchema } from "@/schemas/index"
 import { signIn } from "@/auth"
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes"
 import { AuthError } from "next-auth"
-import prisma from "@/lib/prisma"
-import { generateVerificationToken } from "@/lib/token"
-import { sendVerificationEmail } from "@/lib/sendVerificationEmail"
+import prisma from "@/lib/clients/prisma"
+import { generateVerificationToken } from "@/lib/utils/token"
+import { sendVerificationEmail } from "@/lib/utils/sendVerificationEmail"
 
 export const login = async (data: z.infer<typeof LoginSchema>) => {
   const validatedFields = LoginSchema.safeParse(data)

@@ -3,7 +3,7 @@ import {} from "next-auth/jwt"
 import { Adapter } from "next-auth/adapters"
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import authConfig from "./auth.config"
-import prisma from "@/lib/prisma"
+import prisma from "@/lib/clients/prisma"
 
 declare module "next-auth/jwt" {
   interface JWT {

@@ -1,6 +1,6 @@
 "use server"
 
-import prisma from "@/lib/prisma"
+import prisma from "@/lib/clients/prisma"
 
 export const verifyToken = async (token: string) => {
   const existingUser = await prisma.user.findUnique({
