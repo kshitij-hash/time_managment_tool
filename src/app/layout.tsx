@@ -2,6 +2,9 @@ import type { Metadata } from "next"
 
 import "@/app/globals.css"
 import { poppins } from "@/lib/utils/fonts"
+import "./globals.css"
+import { NavBar } from "./components/Navbar"
+import { Toaster } from "@/components/ui/toaster"
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -15,7 +18,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${poppins.className} antialiased`}>{children}</body>
+      <body className={`${poppins.className} antialiased`}>
+        <NavBar />
+        {children}
+        <Toaster />
+      </body>
     </html>
   )
 }
