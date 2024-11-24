@@ -27,6 +27,8 @@ import { Input } from "@/components/ui/input"
 import { register } from "../../actions/register"
 import { useState } from "react"
 import { Loader2 } from "lucide-react"
+import { DEFAULT_LOGIN_REDIRECT } from "@/routes"
+import { signIn } from "next-auth/react"
 
 export function RegisterForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -51,6 +53,12 @@ export function RegisterForm() {
           alert(response.error);
         }
       })
+  }
+
+  const onClickHandler = () => {
+    signIn("google", {
+      callbackUrl: DEFAULT_LOGIN_REDIRECT,
+    })
   }
 
   return (
@@ -140,7 +148,7 @@ export function RegisterForm() {
             <span className="bg-background px-2 text-muted-foreground">Or</span>
           </div>
         </div>
-        <Button size="lg" className="w-full" variant="outline">
+        <Button size="lg" className="w-full" variant="outline" onClick={onClickHandler}>
           <FcGoogle /> Sign up with Google
         </Button>
       </CardContent>

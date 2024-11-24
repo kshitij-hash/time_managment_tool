@@ -1,9 +1,11 @@
-"use server";
+"use server"
 
 import bcrypt from "bcryptjs"
 import { RegisterSchema } from "@/schemas/index"
 import * as z from "zod"
 import prisma from "@/lib/prisma"
+import { generateVerificationToken } from "@/lib/token"
+import { sendVerificationEmail } from "@/lib/sendVerificationEmail"
 
 export const register = async (data: z.infer<typeof RegisterSchema>) => {
   const validatedFields = RegisterSchema.safeParse(data)
@@ -25,15 +27,22 @@ export const register = async (data: z.infer<typeof RegisterSchema>) => {
     return { error: "Email already in use!" }
   }
 
+  const { expires, token } = generateVerificationToken()
+
   await prisma.user.create({
     data: {
       name,
       email,
       password: hashedPassword,
+      verificationToken: token,
+      verificationTokenExpires: expires,
     },
   })
 
-  //*NOTE: email sending logic here
+  const emailResponse = await sendVerificationEmail(email, token, name)
+  if (!emailResponse.success) {
+    return { error: "Failed to send verification email!" }
+  }
 
-  return { success: "Email sent!" }
+  return { success: "User registered successfully! Please verify your email." }
 }

@@ -23,7 +23,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   trustHost: true,
   pages: {
     signIn: "/login",
-    error: "/error"
+    error: "/error",
   },  
   events: {
     async linkAccount({ user }) {
@@ -36,20 +36,21 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
   },
   callbacks: {
-    //* NOTE: handle email verification
-    // async signIn({ user }) {
-    //   const existingUser = await prisma.user.findUnique({
-    //     where: {
-    //       id: user.id,
-    //     },
-    //   })
+    async signIn({ user, account }) {
+      if(account?.provider !== 'credentials') return true;
 
-    //   if (!existingUser || !existingUser.emailVerified) {
-    //     return false
-    //   }
+      const existingUser = await prisma.user.findUnique({
+        where: {
+          id: user.id,
+        },
+      })
 
-    //   return true
-    // },
+      if (!existingUser?.emailVerified) {
+        return false
+      }
+
+      return true
+    },
     async session({ token, session }) {
       if (session.user) {
         if (token.sub) session.user.id = token.sub

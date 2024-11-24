@@ -1,5 +1,6 @@
 export const PUBLIC_ROUTES = [
     "/",
+    "/verify",
 ];
 
 export const AUTH_ROUTES = [
