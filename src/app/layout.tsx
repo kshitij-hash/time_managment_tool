@@ -1,4 +1,7 @@
 import type { Metadata } from "next"
+
+import "@/app/globals.css"
+import { poppins } from "@/lib/utils/fonts"
 import localFont from "next/font/local"
 import "./globals.css"
 import { NavBar } from "./components/Navbar"
@@ -27,9 +30,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${poppins.className} antialiased`}>
         <NavBar />
         {children}
         <Toaster />
