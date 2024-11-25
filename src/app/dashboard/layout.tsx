@@ -1,4 +1,10 @@
+import type { Metadata } from "next"
+
 import { NavBar } from "@/components/Navbar"
+
+export const metadata: Metadata = {
+  title: "Dashboard",
+}
 
 interface LayoutProps {
   children: React.ReactNode

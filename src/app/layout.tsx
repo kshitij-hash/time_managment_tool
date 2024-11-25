@@ -5,7 +5,11 @@ import { poppins } from "@/lib/utils/fonts"
 import { Toaster } from "@/components/ui/toaster"
 
 export const metadata: Metadata = {
-  title: "Time Management Tool",
+  title: {
+    template: "%s | Time Management Tool",
+    default: "Time Management Tool",
+  },
+  description: "A tool for managing your time.",
 }
 
 export default function RootLayout({

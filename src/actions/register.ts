@@ -11,15 +11,11 @@ import { sendVerificationEmail } from "@/lib/utils/sendVerificationEmail"
 export const register = async (data: z.infer<typeof RegisterSchema>) => {
   const validatedFields = RegisterSchema.safeParse(data)
 
-  console.log({ validatedFields })
-
   if (!validatedFields.success) {
     return { error: "Invalid fields!" }
   }
 
   const { email, password, name } = validatedFields.data
-
-  console.log("here")
 
   const existingUser = await prisma.user.findUnique({
     where: {
@@ -30,8 +26,6 @@ export const register = async (data: z.infer<typeof RegisterSchema>) => {
   if (existingUser) {
     return { error: "Email already in use!" }
   }
-
-  console.log("here-")
 
   const hashedPassword = await hash(password, 10)
 

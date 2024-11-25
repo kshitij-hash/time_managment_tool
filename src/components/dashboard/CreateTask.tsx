@@ -1,48 +1,72 @@
 "use client"
 
+import { z } from "zod"
 import { useState } from "react"
+import { Loader2 } from "lucide-react"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
 
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
+import { useToast } from "@/hooks/use-toast"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
+import { createTask } from "@/actions/createTask"
 import { Checkbox } from "@/components/ui/checkbox"
+import { Task, TaskSchema } from "@/lib/schemas/task"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
-interface Task {
-  id: number
-  name: string
-  urgent: boolean
-  important: boolean
-  timeUnder5Min: boolean
-}
+export function CreateTaskForm() {
+  const { toast } = useToast()
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
-interface CreateTaskFormProps {
-  onTaskCreated: (task: Task) => void
-}
+  const form = useForm<z.infer<typeof TaskSchema>>({
+    resolver: zodResolver(TaskSchema),
+    defaultValues: {
+      activity: "",
+      priority: 1,
+      urgent: false,
+      important: false,
+      timeUnder5Min: false,
+    },
+  })
 
-export function CreateTaskForm({ onTaskCreated }: CreateTaskFormProps) {
-  const [newTask, setNewTask] = useState("")
-  const [isUrgent, setIsUrgent] = useState(false)
-  const [isImportant, setIsImportant] = useState(false)
-  const [isUnder5Min, setIsUnder5Min] = useState(false)
+  const onSubmit = (data: Task) => {
+    setIsSubmitting(true)
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!newTask.trim()) return
-
-    const task: Task = {
-      id: Date.now(),
-      name: newTask,
-      urgent: isUrgent,
-      important: isImportant,
-      timeUnder5Min: isUnder5Min,
-    }
-
-    onTaskCreated(task)
-    setNewTask("")
-    setIsUrgent(false)
-    setIsImportant(false)
-    setIsUnder5Min(false)
+    createTask(data)
+      .then((response) => {
+        if (response.success) {
+          toast({
+            title: "Task created successfully!",
+          })
+        }
+        if (response.error) {
+          toast({
+            title: "Task creation failed!",
+            description: response.error,
+            variant: "destructive",
+          })
+        }
+      })
+      .catch(() => {
+        toast({
+          title: "Task creation failed!",
+          description: "An error occurred. Please try again.",
+          variant: "destructive",
+        })
+      })
+      .finally(() => {
+        setIsSubmitting(false)
+        form.reset()
+      })
   }
 
   return (
@@ -51,44 +75,116 @@ export function CreateTaskForm({ onTaskCreated }: CreateTaskFormProps) {
         <CardTitle>Create New Task</CardTitle>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid gap-2">
-            <Label htmlFor="task">Task Name</Label>
-            <Input
-              id="task"
-              placeholder="Enter your task..."
-              value={newTask}
-              onChange={(e) => setNewTask(e.target.value)}
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="activity"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Activity</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      type="text"
+                      placeholder="Enter your activity"
+                      disabled={isSubmitting}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
-          <div className="flex flex-wrap gap-4">
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="urgent"
-                checked={isUrgent}
-                onCheckedChange={() => setIsUrgent(!isUrgent)}
-              />
-              <Label htmlFor="urgent">Urgent</Label>
+            <FormField
+              control={form.control}
+              name="priority"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Priority</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      type="number"
+                      min={1}
+                      max={10}
+                      placeholder="Enter your priority"
+                      disabled={isSubmitting}
+                      onChange={(e) => field.onChange(parseInt(e.target.value))}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <div className="flex flex-wrap gap-4">
+              <div className="flex items-center space-x-2">
+                <FormField
+                  control={form.control}
+                  name="urgent"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl className="flex items-center justify-center">
+                        <Checkbox
+                          id="urgent"
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Label htmlFor="important">Urgent</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <FormField
+                  control={form.control}
+                  name="important"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl className="flex items-center justify-center">
+                        <Checkbox
+                          id="important"
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Label htmlFor="important">Important</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <FormField
+                  control={form.control}
+                  name="timeUnder5Min"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl className="flex items-center justify-center">
+                        <Checkbox
+                          id="timeUnder5Min"
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Label htmlFor="time">Takes under 5 minutes</Label>
+              </div>
             </div>
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="important"
-                checked={isImportant}
-                onCheckedChange={() => setIsImportant(!isImportant)}
-              />
-              <Label htmlFor="important">Important</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="time"
-                checked={isUnder5Min}
-                onCheckedChange={() => setIsUnder5Min(!isUnder5Min)}
-              />
-              <Label htmlFor="time">Takes under 5 minutes</Label>
-            </div>
-          </div>
-          <Button type="submit">Add Task</Button>
-        </form>
+            <Button type="submit" disabled={isSubmitting}>
+              {isSubmitting ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                "Add Task"
+              )}
+            </Button>
+          </form>
+        </Form>
       </CardContent>
     </Card>
   )
