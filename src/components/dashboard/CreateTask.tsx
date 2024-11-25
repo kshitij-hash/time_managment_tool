@@ -105,8 +105,6 @@ export function CreateTaskForm() {
                     <Input
                       {...field}
                       type="number"
-                      min={1}
-                      max={10}
                       placeholder="Enter your priority"
                       disabled={isSubmitting}
                       onChange={(e) => field.onChange(parseInt(e.target.value))}
