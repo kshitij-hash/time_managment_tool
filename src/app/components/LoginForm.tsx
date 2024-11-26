@@ -54,11 +54,16 @@ export function LoginForm() {
             description: response.error,
             variant: "destructive",
           })
+        } else if (response?.success) {
+          toast({
+            title: "Verification email sent!",
+            description: response.success,
+          })
         } else
-        toast({
-          title: "Login successful!",
-          description: "You have successfully logged in.",
-        })
+          toast({
+            title: "Login successful!",
+            description: "You have successfully logged in.",
+          })
       })
       .catch(() => {
         toast({
