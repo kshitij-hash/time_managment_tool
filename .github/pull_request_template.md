@@ -7,7 +7,6 @@ Fixes: **list of issue numbers**
 - [ ] Branch is up-to-date with the branch to be merged with, i.e., `main`
 - [ ] Code is cleaned up and formatted
 
-
 ### Summary of changes
 
 -
