@@ -9,7 +9,15 @@ export const metadata: Metadata = {
     template: "%s | Time Management Tool",
     default: "Time Management Tool",
   },
-  description: "A tool for managing your time.",
+  description: "Managing the time and prioritizing the task",
+  manifest: "/manifest.json",
+  themeColor: "#000000",
+  viewport: "width=device-width, initial-scale=1, maximum-scale=1",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Task Management Tool",
+  }
 }
 
 export default function RootLayout({
@@ -19,6 +27,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="/icons/icon-192x192.png" />
+        <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+      </head>
       <body className={`${poppins.className} antialiased`}>
         {children}
         <Toaster />

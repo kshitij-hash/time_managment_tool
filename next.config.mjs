@@ -1,19 +1,31 @@
 /** @type {import('next').NextConfig} */
-
 const nextConfig = {
-  images: {
-    remotePatterns: [
+  reactStrictMode: true,
+  swcMinify: true,
+  headers: async () => {
+    return [
       {
-        hostname: "lh3.googleusercontent.com",
+        source: '/sw.js',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=0, must-revalidate',
+          },
+        ],
       },
-      {
-        protocol: "https",
-        hostname: "github.com",
-      },
-    ],
+    ]
   },
-  //*NOTE: added this to have seemless experience with authentication flow
-  reactStrictMode: false,
+  images: {
+        remotePatterns: [
+            {
+                hostname: "lh3.googleusercontent.com",
+            }, {
+                protocol: "https",
+                hostname: "github.com"
+            }
+        ]
+    },
 }
 
 export default nextConfig
+
